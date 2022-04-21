@@ -1,11 +1,11 @@
 import express from "express";
-import bodyParser from "body-parser";
 import chalk from "chalk";
 
-import { validateUser, validateTweet } from "./src/validate.js"; //eslint-disable-line
+// eslint-disable-next-line
+import { validateUser, validateTweet } from "./src/validate.js"; 
 
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
 
 const users = [
   {
@@ -89,29 +89,25 @@ const tweets = [
   },
 ];
 
-app.get("/", (req, res) => {
-  res.send("Mensagem de teste !!!!");
-});
-
 app.post("/sign-up", (req, res) => {
   const { body } = req;
 
   if (validateUser(body)) {
-    // TODO adicionar a lista de usuarios
     users.push(body);
-    res.send("OK");
+    res.status(201).send("OK");
   } else {
-    // TODO retornar erro certo
+    // TODO retornar status code certo
     res.sendStatus(422);
   }
 });
 
 app.post("/tweets", (req, res) => {
+  // TODO checar se o usuario existe (header)
   const { body } = req;
 
   if (validateTweet(body)) {
     tweets.push(body);
-    res.send("OK");
+    res.status(201).send("OK");
   } else {
     res.sendStatus(422);
   }
@@ -125,6 +121,16 @@ app.get("/tweets", (req, res) => {
   }
 
   res.send(tweetsToSend);
+});
+
+app.get("/tweets/:user", (req, res) => {
+  const { user } = req.params;
+  const userTweets = tweets.filter((tweet) => tweet.username === user);
+
+  if (!users.find((usersItem) => usersItem.username === user))
+    res.status(400).send("Usuario nao encontrado");
+
+  res.send(userTweets);
 });
 
 app.listen(5000, () => {

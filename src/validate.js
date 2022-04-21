@@ -9,6 +9,8 @@ export function validateUser(body) {
   const checkUsername = username.length > 0;
   const checkAvatar = urlRegex.test(avatar);
 
+  if (!username || !avatar) return false;
+
   if (
     // checa se o obj body segue a estrutura correta
     props.length !== 2 ||
@@ -30,6 +32,8 @@ export function teste() {
 export function validateTweet(body) {
   const { username, tweet } = body;
   const props = Object.getOwnPropertyNames(body);
+
+  if (!username || !tweet) return false;
 
   const checkUsername = username.length > 0;
   const checkTweet = tweet.length > 0;
