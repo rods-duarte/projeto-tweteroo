@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import chalk from "chalk";
 
-import { validateUser } from "./src/validate.js"; //eslint-disable-line
+import { validateUser, validateTweet } from "./src/validate.js"; //eslint-disable-line
 
 const app = express();
 app.use(bodyParser.json());
@@ -99,15 +99,30 @@ app.post("/sign-up", (req, res) => {
   if (validateUser(body)) {
     // TODO adicionar a lista de usuarios
     users.push(body);
-    res.send(users);
+    res.send("OK");
   } else {
     // TODO retornar erro certo
     res.sendStatus(422);
   }
 });
 
+app.post("/tweets", (req, res) => {
+  const { body } = req;
+
+  if (validateTweet(body)) {
+    tweets.push(body);
+    res.send("OK");
+  } else {
+    res.sendStatus(422);
+  }
+});
+
 app.get("/tweets", (req, res) => {
-  const tweetsToSend = tweets.reverse().splice(0, 10).reverse();
+  const tweetsToSend = [];
+
+  for (let i = tweets.length - 10; i < tweets.length; i++) {
+    tweetsToSend.push(tweets[i]);
+  }
 
   res.send(tweetsToSend);
 });

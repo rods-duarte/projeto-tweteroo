@@ -1,6 +1,8 @@
+// TODO talvez retornar o status code ao inves de true/false
+// TODO validar se os parametros foram passados para nao dar erro 500, (check if undefined)
+
 export function validateUser(body) {
   const { username, avatar } = body;
-  console.log(body);
   const props = Object.getOwnPropertyNames(body);
 
   const urlRegex = /(https:\/\/).+/;
@@ -12,8 +14,9 @@ export function validateUser(body) {
     props.length !== 2 ||
     !props.includes("username") ||
     !props.includes("avatar")
-  )
+  ) {
     return false;
+  }
 
   if (!checkUsername || !checkAvatar) return false;
 
@@ -22,4 +25,24 @@ export function validateUser(body) {
 
 export function teste() {
   return "teste";
+}
+
+export function validateTweet(body) {
+  const { username, tweet } = body;
+  const props = Object.getOwnPropertyNames(body);
+
+  const checkUsername = username.length > 0;
+  const checkTweet = tweet.length > 0;
+
+  if (
+    props.length !== 2 ||
+    !props.includes("username") ||
+    !props.includes("tweet")
+  ) {
+    return false;
+  }
+
+  if (!checkUsername || !checkTweet) return false;
+
+  return true;
 }

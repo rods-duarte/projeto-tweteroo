@@ -18,6 +18,7 @@
     "rules": {
         "import/no-unresolved": "error",
         "no-console": "off",
+        "no-plusplus": "off",
         "prettier/prettier": "error"
     }
 }
