@@ -1,7 +1,6 @@
-// TODO talvez retornar o status code ao inves de true/false
-// TODO validar se os parametros foram passados para nao dar erro 500, (check if undefined)
+import users from "./users.js";
 
-export function validateUser(body) {
+export function validateNewUser(body) {
   const { username, avatar } = body;
   const props = Object.getOwnPropertyNames(body);
 
@@ -20,7 +19,9 @@ export function validateUser(body) {
     return false;
   }
 
-  if (!checkUsername || !checkAvatar) return false;
+  if (!checkUsername || !checkAvatar) return false; // checa se os valores seguem o padrao esperado
+
+  if (users.find((usersItem) => usersItem.username === username)) return false; // checa se o usuario ja existe
 
   return true;
 }
@@ -29,24 +30,25 @@ export function teste() {
   return "teste";
 }
 
-export function validateTweet(body) {
-  const { username, tweet } = body;
-  const props = Object.getOwnPropertyNames(body);
+export function validateTweet(body, headers) {
+  const { tweet } = body;
+  const { user } = headers;
+  const bodyProps = Object.getOwnPropertyNames(body);
 
-  if (!username || !tweet) return false;
+  if (!user || !tweet) return false;
 
-  const checkUsername = username.length > 0;
+  const checkUser = user.length > 0;
   const checkTweet = tweet.length > 0;
 
-  if (
-    props.length !== 2 ||
-    !props.includes("username") ||
-    !props.includes("tweet")
-  ) {
+  if (bodyProps.length !== 1) {
     return false;
   }
 
-  if (!checkUsername || !checkTweet) return false;
+  if (!checkUser || !checkTweet) return false;
 
   return true;
+}
+
+export function validateUser(user) {
+  return !users.find((usersItem) => usersItem.username === user);
 }
