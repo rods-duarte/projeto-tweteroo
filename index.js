@@ -1,7 +1,11 @@
 import express from "express";
+import bodyParser from "body-parser";
 import chalk from "chalk";
 
+import { validateUser } from "./src/validate.js"; //eslint-disable-line
+
 const app = express();
+app.use(bodyParser.json());
 
 const users = [
   {
@@ -89,6 +93,19 @@ app.get("/", (req, res) => {
   res.send("Mensagem de teste !!!!");
 });
 
+app.post("/sign-up", (req, res) => {
+  const { body } = req;
+
+  if (validateUser(body)) {
+    // TODO adicionar a lista de usuarios
+    users.push(body);
+    res.send(users);
+  } else {
+    // TODO retornar erro certo
+    res.sendStatus(422);
+  }
+});
+
 app.get("/tweets", (req, res) => {
   const tweetsToSend = tweets.reverse().splice(0, 10).reverse();
 
@@ -96,5 +113,5 @@ app.get("/tweets", (req, res) => {
 });
 
 app.listen(5000, () => {
-    console.log(chalk.bold.greenBright(`Servidor aberto na porta 5000`)); //eslint-disable-line
+  console.log(chalk.bold.greenBright(`Servidor aberto na porta 5000`));
 });
