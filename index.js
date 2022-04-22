@@ -42,14 +42,49 @@ app.post("/tweets", (req, res) => {
 });
 
 app.get("/tweets", (req, res) => {
+  const { page } = req.query;
   const tweetsToSend = [];
 
-  for (let i = tweets.length - 10; i < tweets.length; i++) {
+  const start = tweets.length - 10 * page > 0 ? tweets.length - 10 * page : 0;
+  const end =
+    tweets.length - 10 * (page - 1) > 0
+      ? tweets.length - 10 * (page - 1)
+      : null;
+
+  // verifica se a pagina ja chegou no final
+  if (end === null) {
+    res.status(404).send("pagina nao existe");
+    return;
+  }
+
+  for (let i = start; i < end; i++) {
     tweetsToSend.push(tweets[i]);
   }
 
-  res.send(tweetsToSend);
+  res.send(tweetsToSend.reverse());
 });
+
+/*
+33
+
+page = 1
+ultimo elemento - 10 -> ultimo elemento
+23 -> 33
+
+page = 2
+ultimo elemento - 20 -> ultimo elemento - 10
+13 -> 23
+
+page = 3
+3 -> 13
+
+page = 4
+0 -> 3
+
+page = 5
+0 -> null
+
+*/
 
 app.get("/tweets/:user", (req, res) => {
   const { user } = req.params;
