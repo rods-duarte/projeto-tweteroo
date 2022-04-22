@@ -7,8 +7,7 @@ import {
   validateUser,
   validateTweet,
 } from "./src/validate.js";
-import users from "./src/users.js";
-import tweets from "./src/tweets.js";
+import { users, tweets } from "./src/data.js";
 
 const app = express();
 app.use(cors());
@@ -64,35 +63,15 @@ app.get("/tweets", (req, res) => {
   res.send(tweetsToSend.reverse());
 });
 
-/*
-33
-
-page = 1
-ultimo elemento - 10 -> ultimo elemento
-23 -> 33
-
-page = 2
-ultimo elemento - 20 -> ultimo elemento - 10
-13 -> 23
-
-page = 3
-3 -> 13
-
-page = 4
-0 -> 3
-
-page = 5
-0 -> null
-
-*/
-
 app.get("/tweets/:user", (req, res) => {
   const { user } = req.params;
   const userTweets = tweets.filter((tweet) => tweet.username === user);
+  console.log(userTweets);
+  console.log(users);
 
   if (validateUser(user)) res.status(400).send("Usuario nao encontrado");
 
-  res.send(userTweets);
+  res.send(userTweets.reverse());
 });
 
 app.listen(5000, () => {

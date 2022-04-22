@@ -1,4 +1,4 @@
-import users from "./users.js";
+import { users } from "./data.js";
 
 export function validateNewUser(body) {
   const { username, avatar } = body;
