@@ -26,10 +26,6 @@ export function validateNewUser(body) {
   return true;
 }
 
-export function teste() {
-  return "teste";
-}
-
 export function validateTweet(body, headers) {
   const { tweet } = body;
   const { user } = headers;

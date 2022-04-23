@@ -20,8 +20,7 @@ app.post("/sign-up", (req, res) => {
     users.push(body);
     res.status(201).send("OK");
   } else {
-    // TODO retornar status code certo
-    res.sendStatus(422);
+    res.sendStatus(400);
   }
 });
 
@@ -36,7 +35,7 @@ app.post("/tweets", (req, res) => {
     tweets.push({ username: headers.user, ...body });
     res.status(201).send("OK");
   } else {
-    res.sendStatus(422);
+    res.sendStatus(400);
   }
 });
 
@@ -66,8 +65,6 @@ app.get("/tweets", (req, res) => {
 app.get("/tweets/:user", (req, res) => {
   const { user } = req.params;
   const userTweets = tweets.filter((tweet) => tweet.username === user);
-  console.log(userTweets);
-  console.log(users);
 
   if (validateUser(user)) res.status(400).send("Usuario nao encontrado");
 
