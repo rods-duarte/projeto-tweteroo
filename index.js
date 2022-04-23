@@ -32,7 +32,11 @@ app.post("/tweets", (req, res) => {
     return;
   }
   if (validateTweet(body, headers)) {
-    tweets.push({ username: headers.user, ...body });
+    // Busca pela foto de perfil do usuario
+    const { avatar } = users.find(
+      (usersItem) => usersItem.username === headers.user
+    );
+    tweets.push({ username: headers.user, avatar, ...body });
     res.status(201).send("OK");
   } else {
     res.sendStatus(400);
@@ -72,5 +76,5 @@ app.get("/tweets/:user", (req, res) => {
 });
 
 app.listen(5000, () => {
-  console.log(chalk.bold.greenBright(`Servidor aberto na porta 5000`));
+  console.log(chalk.bold.greenBright(`\nServidor aberto na porta 5000`));
 });
